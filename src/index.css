@@ -222,6 +222,14 @@ select {
   border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--line);
+  background: #d8d5ce;
+  position: relative;
+}
+
+.mapa .maplibregl-canvas,
+.mapa .maplibregl-canvas-container {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .mapa-armar {

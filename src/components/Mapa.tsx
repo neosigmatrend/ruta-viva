@@ -20,8 +20,30 @@ type Props = {
   className?: string
 }
 
-const STYLE =
-  'https://tiles.openfreemap.org/styles/liberty'
+/** Raster OSM: más confiable en local que estilos vectoriales remotos. */
+const STYLE = {
+  version: 8 as const,
+  sources: {
+    osm: {
+      type: 'raster' as const,
+      tiles: [
+        'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      ],
+      tileSize: 256,
+      attribution: '© OpenStreetMap',
+      maxzoom: 19,
+    },
+  },
+  layers: [
+    {
+      id: 'osm',
+      type: 'raster' as const,
+      source: 'osm',
+    },
+  ],
+}
 
 export function Mapa({
   center = { lat: -33.45, lng: -70.66 },
@@ -54,9 +76,16 @@ export function Mapa({
     map.on('click', (e: MapMouseEvent) => {
       onClickRef.current?.(e.lngLat.lat, e.lngLat.lng)
     })
+    const onReady = () => {
+      map.resize()
+    }
+    map.on('load', onReady)
+    const ro = new ResizeObserver(() => map.resize())
+    ro.observe(containerRef.current)
     mapRef.current = map
 
     return () => {
+      ro.disconnect()
       markersRef.current.forEach((m) => m.remove())
       userMarkerRef.current?.remove()
       map.remove()
