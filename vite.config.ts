@@ -11,4 +11,8 @@ export default defineConfig({
     host: true,
     port: 4173,
   },
+  optimizeDeps: {
+    // MapLibre worker no es compatible con el prebundle de Vite
+    exclude: ['maplibre-gl'],
+  },
 })
