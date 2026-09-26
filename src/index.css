@@ -330,6 +330,29 @@ select {
   border-radius: 12px;
 }
 
+.ocr-box {
+  background: rgba(124, 184, 146, 0.12);
+  border: 1px solid rgba(124, 184, 146, 0.35);
+  border-radius: 12px;
+  padding: 0.75rem 0.9rem;
+}
+
+.ocr-box p {
+  margin: 0.15rem 0;
+}
+
+.ocr-candidates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.55rem;
+}
+
+.chip-btn {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.9rem;
+}
+
 .debug {
   margin-top: 0.5rem;
   color: var(--muted);
