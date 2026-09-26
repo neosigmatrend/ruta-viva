@@ -1,0 +1,11 @@
+{
+  "name": "Ruta viva",
+  "short_name": "Ruta viva",
+  "description": "Viajes en moto: mapa, peajes, pausas y costos",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1714",
+  "theme_color": "#c45c26",
+  "lang": "es-CL",
+  "orientation": "portrait"
+}
