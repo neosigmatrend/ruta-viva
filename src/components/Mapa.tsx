@@ -12,6 +12,9 @@ import type { GeoPoint, PeajeCatalogo, TrackPoint } from '../models/types'
 type Props = {
   center?: { lat: number; lng: number }
   zoom?: number
+  bearing?: number
+  pitch?: number
+  follow?: boolean
   destino?: GeoPoint | null
   peajes?: PeajeCatalogo[]
   track?: TrackPoint[]
@@ -48,6 +51,9 @@ const STYLE = {
 export function Mapa({
   center = { lat: -33.45, lng: -70.66 },
   zoom = 11,
+  bearing = 0,
+  pitch = 0,
+  follow = false,
   destino,
   peajes = [],
   track = [],
@@ -70,9 +76,11 @@ export function Mapa({
       style: STYLE,
       center: [center.lng, center.lat],
       zoom,
+      bearing,
+      pitch,
       attributionControl: { compact: true },
     })
-    map.addControl(new NavigationControl({ showCompass: false }), 'top-right')
+    map.addControl(new NavigationControl({ showCompass: true }), 'top-right')
     map.on('click', (e: MapMouseEvent) => {
       onClickRef.current?.(e.lngLat.lat, e.lngLat.lng)
     })
@@ -93,6 +101,22 @@ export function Mapa({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- init once
   }, [])
+
+  // Cámara: sigue GPS + zoom/rumbo por velocidad
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map || !follow) return
+    const lat = user?.lat ?? center.lat
+    const lng = user?.lng ?? center.lng
+    map.easeTo({
+      center: [lng, lat],
+      zoom,
+      bearing,
+      pitch,
+      duration: 600,
+      essential: true,
+    })
+  }, [follow, user?.lat, user?.lng, zoom, bearing, pitch, center.lat, center.lng])
 
   useEffect(() => {
     const map = mapRef.current
